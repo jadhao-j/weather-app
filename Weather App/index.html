@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Weather Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="fas fa-cloud-sun me-2"></i>WeatherPro</a>
+      <div class="navbar-nav ms-auto">
+        <button class="btn btn-outline-light me-2" id="themeToggle">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="btn btn-outline-light" id="locationBtn">
+          <i class="fas fa-location-arrow"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Search Section -->
+    <div class="search-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="search-card">
+              <h1 class="app-title">
+                <i class="fas fa-cloud-sun me-3"></i>
+                Advanced Weather Dashboard
+              </h1>
+              <p class="app-subtitle">Get detailed weather information for any location worldwide</p>
+              
+              <div class="search-container">
+                <div class="input-group search-input-group">
+                  <input type="text" id="cityInput" class="form-control search-input" placeholder="Enter city name..." />
+                  <button class="btn btn-primary search-btn" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+                <div class="search-suggestions" id="searchSuggestions"></div>
+              </div>
+
+              <!-- Quick Actions -->
+              <div class="quick-actions">
+                <button class="btn btn-outline-primary quick-btn" data-city="Nagpur">
+                  <i class="fas fa-city"></i> Nagpur
+                </button>
+                <button class="btn btn-outline-primary quick-btn" data-city="Mumbai">
+                  <i class="fas fa-city"></i> Mumbai
+                </button>
+                <button class="btn btn-outline-primary quick-btn" data-city="Delhi">
+                  <i class="fas fa-city"></i> Delhi
+                </button>
+                <button class="btn btn-outline-primary quick-btn" data-city="Bangalore">
+                  <i class="fas fa-city"></i> Bangalore
+                </button>
+                <button class="btn btn-outline-primary quick-btn" data-city="London">
+                  <i class="fas fa-city"></i> London
+                </button>
+                <button class="btn btn-outline-primary quick-btn" data-city="New York">
+                  <i class="fas fa-city"></i> New York
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-container" id="loadingContainer">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="loading-text">Fetching weather data...</p>
+    </div>
+
+    <!-- Weather Content -->
+    <div class="weather-content" id="weatherContent">
+      <!-- Current Weather -->
+      <div class="current-weather-section" id="currentWeatherSection">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-10">
+              <div class="current-weather-card" id="currentWeatherCard">
+                <!-- Current weather will be populated here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forecast Section -->
+      <div class="forecast-section" id="forecastSection">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h2 class="section-title">
+                <i class="fas fa-calendar-alt me-2"></i>
+                5-Day Forecast
+              </h2>
+              <div class="forecast-container" id="forecastContainer">
+                <!-- Forecast cards will be populated here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="charts-section" id="chartsSection">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="chart-card">
+                <h3 class="chart-title">
+                  <i class="fas fa-thermometer-half me-2"></i>
+                  Temperature Trend
+                </h3>
+                <div class="chart-container">
+                  <canvas id="temperatureChart"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="chart-card">
+                <h3 class="chart-title">
+                  <i class="fas fa-tint me-2"></i>
+                  Humidity & Pressure
+                </h3>
+                <div class="chart-container">
+                  <canvas id="humidityChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Info Section -->
+      <div class="additional-info-section" id="additionalInfoSection">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="info-card">
+                <div class="info-icon">
+                  <i class="fas fa-sun"></i>
+                </div>
+                <div class="info-content">
+                  <h4>UV Index</h4>
+                  <p id="uvIndex">--</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="info-card">
+                <div class="info-icon">
+                  <i class="fas fa-eye"></i>
+                </div>
+                <div class="info-content">
+                  <h4>Visibility</h4>
+                  <p id="visibility">--</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="info-card">
+                <div class="info-icon">
+                  <i class="fas fa-wind"></i>
+                </div>
+                <div class="info-content">
+                  <h4>Wind Direction</h4>
+                  <p id="windDirection">--</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Favorites Section -->
+    <div class="favorites-section" id="favoritesSection">
+      <div class="container">
+        <h2 class="section-title">
+          <i class="fas fa-heart me-2"></i>
+          Favorite Cities
+        </h2>
+        <div class="favorites-container" id="favoritesContainer">
+          <!-- Favorite cities will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div class="toast" id="notificationToast" role="alert">
+      <div class="toast-header">
+        <i class="fas fa-bell text-primary me-2"></i>
+        <strong class="me-auto">Weather Alert</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+      </div>
+      <div class="toast-body" id="toastBody">
+        <!-- Notification content -->
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="database.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
